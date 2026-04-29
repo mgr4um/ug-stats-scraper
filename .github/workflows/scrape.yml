@@ -1,0 +1,44 @@
+# .github/workflows/scrape.yml
+name: Daily UG Scraper
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Runs at 6 AM UTC daily
+  workflow_dispatch:      # Allows manual run from GitHub UI
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+      
+    - name: Create cookies file
+      run: echo "${{ secrets.UG_COOKIES }}" > ug_cookies.json
+      
+    - name: Run scraper
+      run: python3 stats_viewer.py scrape
+      
+    - name: Upload database as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ug-stats-db
+        path: ug_stats.db
+        retention-days: 90
+        
+    - name: Commit database back to repo
+      run: |
+        git config --global user.name 'github-actions'
+        git config --global user.email 'actions@github.com'
+        git add ug_stats.db
+        git commit -m "Update stats $(date +%Y-%m-%d)" || exit 0
+        git push
