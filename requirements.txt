@@ -1,0 +1,7 @@
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+browser-cookie3>=0.19.0  # Optional, for automatic cookie extraction
+schedule>=1.2.0  # Optional, for scheduled scraping
+lxml>=4.9.0  # Better HTML parsing
+flask>=3.0.0  # Optional, for web dashboard
+curl_cffi>=0.5.10
