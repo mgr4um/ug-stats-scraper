@@ -23,7 +23,11 @@ jobs:
       run: pip install -r requirements.txt
       
     - name: Create cookies file
-      run: echo "${{ secrets.UG_COOKIES }}" > ug_cookies.json
+      shell: bash
+      run: |
+        echo "${{ secrets.UG_COOKIES }}" | base64 -d > ug_cookies.json
+        echo "Decoded cookies file:"
+        python3 -m json.tool ug_cookies.json
       
     - name: Run scraper
       run: python3 stats_viewer.py scrape
