@@ -5,3 +5,4 @@ schedule>=1.2.0  # Optional, for scheduled scraping
 lxml>=4.9.0  # Better HTML parsing
 flask>=3.0.0  # Optional, for web dashboard
 curl_cffi>=0.5.10
+cloudscraper
